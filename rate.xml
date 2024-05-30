@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<record>
+		<Currency>USD</Currency>
+		<Cash>30.96</Cash>
+	</record>
+	<record>
+		<Currency>EUR</Currency>
+		<Cash>33.45</Cash>
+	</record>
+	<record>
+		<Currency>JPY</Currency>
+		<Cash>0.222</Cash>
+	</record>
+	<record>
+		<Currency>KRW</Currency>
+		<Cash>0.02534</Cash>
+	</record>
+	<record>
+		<Currency>AUD</Currency>
+		<Cash>20.44</Cash>
+	</record>
+</dataset>

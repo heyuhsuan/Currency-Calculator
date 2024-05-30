@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>匯率轉換計算機</title>
+        <link rel="stylesheet" href="mystyle.css">
+	</head>
+	<body>
+		<label>請輸入金額 (單位：臺幣元)</label>
+         <br>
+         <p>請勿輸入非整數</p>
+         <!--輸入台幣金額-->
+		<input id="NTD" type="text" placeholder="ex. 100" value=""/>
+		<br><br>
+		<button type="button" id="btn" onclick="loadDoc()">執行計算</button>
+        <button type="button" id="rst" onclick="rst()">重新開始</button>
+		<hr>
+		Result:
+        <p>輸入金額為</p><p class="result"></p>
+        <p class="summary"></ul></p>
+        
+        <script>
+            function loadDoc(){
+                /*開啟rate.xml*/
+                const xhttp = new XMLHttpRequest();
+                xhttp.onload = function(){
+                    myFunction(this);
+                }
+                xhttp.open("GET", "./rate.xml");
+                xhttp.send();
+            }
+
+            function rst(){
+                /*重新開始計算*/
+                document.getElementById("NTD").innerHTML = "";
+            }
+
+            function myFunction(xml){
+                const xmlDoc = xml.responseXML;
+                const x = xmlDoc.getElementsByTagName("record");
+                let input = document.getElementById("NTD").value;
+                
+                /*檢查是否為有效輸入*/
+                if (!document.getElementById("NTD").value.isInteger(input)){
+                    alert('輸入非有效數值，已進行reset');
+                    rst();
+                    return;
+                }
+
+                let table = "<tr><th>幣別</th><th>匯率</th><th>金額</th></tr>";
+                for (let i = 0; i<x.length; i++){
+                    table += "<tr><td>" +
+                    parceFloat(x[i].getElementsByTagName("Currency")[0].childNodes[0].nodeValue).toFixed(2) +
+                    "<td></td>" +
+                    parceFloat(x[i].getElementsByTagName("Cash")[0].childNodes[0].nodeValue).toFixed(2) +
+                    "<td></td>" +
+                    input/parceFloat(x[i].getElementsByTagName("Cash")[0].childNodes[0].nodeValue).toFixed(2) +
+                    "<td></td>";
+                }
+                document.getElementById("result").innerHTML = input;
+                document.getElementById("summary").innerHTML = table;
+            }
+        </script>
+	</body>
+</html>
+
