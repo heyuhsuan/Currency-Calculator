@@ -17,4 +17,4 @@ rate.xml:1
 
 But running through Node.js localhost displays properly.
 
-![Project Screenshot](Currency calculator.png)
+![Project Screenshot](Currency%20calculator.png)
