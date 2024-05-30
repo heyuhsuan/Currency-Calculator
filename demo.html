@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+	<head><meta charset="utf-8">
+		<title>Currency calculator</title>
+        <link rel="stylesheet" href="mystyle.css">
+	</head>
+	<body>
+		<label>Please enter the amount of NTD to be converted (Unit: NTD)</label>
+        <br>
+        <p>Please refrain from entering non-integers</p>
+        <!--Enter NTD amount-->
+		<input id="NTD" type="text" placeholder="ex. 100" value=""/>
+		<br><br>
+		<button type="button" id="btn" onclick="loadDoc()">Calculate</button>
+        <button type="button" id="rst" onclick="rst()">Reset</button>
+		<hr>
+		Result:
+        <p>Entered amount is: NTD <span id="input-amount"></span></p>
+        <table id="result-table">
+            <thead>
+                <tr>
+                    <th>Currency</th>
+                    <th>Rate</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        
+        <script>
+            function loadDoc(){
+                /*Open rate.xml*/
+                const xhttp = new XMLHttpRequest();
+                xhttp.onload = function(){
+                    myFunction(this);
+                }
+                xhttp.open("GET", "./rate.xml");
+                xhttp.send();
+            }
+
+            function rst(){
+                /*Recalculate*/
+                document.getElementById("NTD").value = "";
+                document.getElementById("input-amount").innerHTML = "";
+                document.getElementById("result-table").getElementsByTagName("tbody")[0].innerHTML = "";
+            }
+
+            function myFunction(xml){
+                const xmlDoc = xml.responseXML;
+                const x = xmlDoc.getElementsByTagName("record");
+                let input = document.getElementById("NTD").value;
+                
+                /*Inspect if value is allowed*/
+                if (!Number.isInteger(parseInt(input))){
+                    alert('Input not allowed, values have been reset');
+                    rst();
+                    return;
+                }
+
+                document.getElementById("input-amount").innerHTML = input;
+
+                let tableContent = "";
+                for (let i = 0; i<x.length; i++){
+                    const currency = x[i].getElementsByTagName("Currency")[0].childNodes[0].nodeValue;
+                    const rate = parseFloat(x[i].getElementsByTagName("Cash")[0].childNodes[0].nodeValue).toFixed(2);
+                    const amount = (input / rate).toFixed(2);
+                    tableContent += `<tr>
+                                        <td>${currency}</td>
+                                        <td>${rate}</td>
+                                        <td>${amount}</td>
+                                     </tr>`;
+                }
+                document.getElementById("result-table").getElementsByTagName("tbody")[0].innerHTML = tableContent;
+            }
+        </script>
+	</body>
+</html>
